@@ -162,11 +162,10 @@ Player.prototype.blur = function () {
 };
 
 Player.prototype.move = function (distance, pawn) {
-    var fields = [],
+    var steps = [],
         nextPawns,
         nextPos,
         dest, destField,
-        steps,
         i,
         switchPlayer = false,
         killOtherPawn = false;
@@ -190,19 +189,20 @@ Player.prototype.move = function (distance, pawn) {
         // enter the board
         nextPos = 0;
 		var f = this.board.getField(this.path[0]);
-        fields.push({action: ACTION.NORMAL, field: f});
+        steps.push({action: ACTION.OUTOFBASE, postAction: ACTION.NONE, field: f});
         switchPlayer = false;
     // pawn is moving on the board
     } else {
         nextPos = pawn.position + distance;
-        steps = this.path.slice(pawn.position + 1, nextPos + 1);
-        if (steps.length) {
+        var fields = this.path.slice(pawn.position + 1, nextPos + 1);
+        if (fields.length) {
             i = 0;
-            while (steps[i]) {
-                fields.push({action: ACTION.NORMAL,
-					field: this.board.getField(steps[i])});
+            while (fields[i]) {
+                steps.push({action: ACTION.NORMAL, postAction: ACTION.NORMAL,
+					field: this.board.getField(fields[i])});
                 i++;
             }
+			steps[steps.length-1].postAction = ACTION.NONE;
         }
         if(distance == 6)
         {
@@ -216,25 +216,33 @@ Player.prototype.move = function (distance, pawn) {
 	var destField = this.board.getField(this.path[nextPos]);
 	if (destField.color === this.color) {
 		if (destField.action === ACTION.JUMP) {
+			steps[steps.length-1].postAction = ACTION.JUMP;
+
 			nextPos = nextPos + this.board.getJUMPdelta(destField);
 			destField = this.board.getField(this.path[nextPos]);
-			fields.push({action: ACTION.JUMP, field: destField});
+			steps.push({action: ACTION.JUMP, postAction: ACTION.NONE,
+				field: destField});
 
 			if (destField.action === ACTION.FLIGHT) {
-				fields[fields.length-1].action=ACTION.JUMPFLIGHT;
+				steps[steps.length-1].postAction=ACTION.FLIGHT;
+
 				nextPos = nextPos + this.board.getFLIGHTdelta(destField);
 				destField = this.board.getField(this.path[nextPos]);
-				fields.push({action: ACTION.FLIGHT, field: destField});
+				steps.push({action: ACTION.FLIGHT, postAction: ACTION.NONE,
+					field: destField});
 			}
 		} else if (destField.action === ACTION.FLIGHT) {
-			fields[fields.length-1].action=ACTION.MOVEFLIGHT;
+			steps[steps.length-1].postAction=ACTION.FLIGHT;
+
 			nextPos = nextPos + this.board.getFLIGHTdelta(destField);
 			destField = this.board.getField(this.path[nextPos]);
-			fields.push({action: ACTION.FLIGHT, field: destField});
+			steps.push({action: ACTION.FLIGHT, postAction: ACTION.JUMP,
+				field: destField});
 
 			nextPos = nextPos + this.board.getJUMPdelta(destField);
 			destField = this.board.getField(this.path[nextPos]);
-			fields.push({action: ACTION.JUMP, field: destField});
+			steps.push({action: ACTION.JUMP, postAction: ACTION.NONE,
+				field: destField});
 		}
 	}
 
@@ -265,7 +273,9 @@ Player.prototype.move = function (distance, pawn) {
     } else if (nextPos == this.arrivePosition) {
         var field = this.board.getBaseFreeField(this.color);
         if (field) {
-            fields.push({action: ACTION.ARRIVE, field: field});
+			steps[steps.length-1].postAction = ACTION.ARRIVE;
+            steps.push({action: ACTION.ARRIVE, postAction: ACTION.NONE,
+				field: field});
         } else {
             console.log('no field for pawn back to base');
 			return false;
@@ -276,7 +286,7 @@ Player.prototype.move = function (distance, pawn) {
         return false;
     }
 
-    pawn.move(fields,
+    pawn.move(steps,
         function() {
             var player = pawn.player;
 

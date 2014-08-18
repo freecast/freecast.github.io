@@ -107,6 +107,7 @@ Pawn.prototype.step = function (oneStep, isStop) {
 	var sfxName = 'move';
 	var field = oneStep.field;
 	var action = oneStep.action;
+	var postAction = oneStep.postAction;
 
 	if (isStop === Pawn.STOP) {
 		if (action === ACTION.FLIGHT) {
@@ -117,7 +118,7 @@ Pawn.prototype.step = function (oneStep, isStop) {
 			rotation = field.rotForNormalStop;
 		}
 	} else {
-		if (action === ACTION.MOVEFLIGHT || action === ACTION.JUMPFLIGHT) {
+		if (postAction === ACTION.FLIGHT) {
 			/* will takeoff */
 			rotation = field.rotForTakeOff;
 		} else if (action === ACTION.FLIGHT) {
@@ -143,29 +144,32 @@ Pawn.prototype.step = function (oneStep, isStop) {
         });
 		this.$elem.css("-webkit-transform", "rotate("+rotation+"deg)");
 
-    if(action !== ACTION.KILL)
-		{
-
-        if (this.position === -1) {
-            Sfx.play('plane_up');
-        }else if (this.position === game.board.getArrivePosition()) {
-            Sfx.play('win_fly_back_home');
-        }else if (this.position > 0) {
-            Sfx.play('move');
-        }
-             
-        
-    }else
-    	{
-    		 Sfx.play('plane_fall');
-    	}
-  }
+		if (action === ACTION.KILL) {
+			Sfx.play('plane_fall');
+		} else if (action === ACTION.OUTOFBASE) {
+			Sfx.play('plane_up');
+		} else if (postAction === ACTION.ARRIVE) {
+			Sfx.play('move', function() {
+				Sfx.play('win_fly_back_home');
+			});
+		} else if (postAction === ACTION.JUMP) {
+			Sfx.play('move', function() {
+				Sfx.play('jump4');
+			});
+		} else if (postAction === ACTION.FLIGHT) {
+			Sfx.play('move', function() {
+				Sfx.play('fly_across');
+			});
+		} else {
+			Sfx.play('move');
+		}
+	}
 };
 
 Pawn.prototype.kill = function (field) {
     if (field) {
 		//TODO: play sfx of explosion and back home
-        this.move([{action: ACTION.KILL,
+        this.move([{action: ACTION.KILL, postAction: ACTION.NONE,
 			field: field}]);
         this.position = -1;
     }

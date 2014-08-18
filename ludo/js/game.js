@@ -18,12 +18,15 @@ var RED = 'red',
     BLUE = 'blue';
 
 var ACTION = {
+	NONE       : "none",
+
+	OUTOFBASE  : "outOfBase",
 	NORMAL     : "move",
-	MOVEFLIGHT : "moveToFlight",
-	JUMPFLIGHT : "jumpToFlight",
+
 	JUMP       : "jump",
 	FLIGHT     : "flight",
 	ARRIVE     : "arrive",
+
 	KILL       : "kill",
 	RESET      : "reset",
 	TURNRIGHT  : "turnright",
