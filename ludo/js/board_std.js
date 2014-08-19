@@ -277,3 +277,14 @@ BoardSTD.prototype.getBaseFreeField = function (color) {
 	var base = this.bases[color];
 	return base.getFreeField();
 };
+
+BoardSTD.prototype.getFlyAcrossField = function (color) {
+	var flyAcrossField = {};
+
+	flyAcrossField[RED]    = [7, 3];
+	flyAcrossField[GREEN]  = [3, 7];
+	flyAcrossField[YELLOW] = [11, 7];
+	flyAcrossField[BLUE]   = [7, 11];
+
+	return this.getField(flyAcrossField[color]);
+};

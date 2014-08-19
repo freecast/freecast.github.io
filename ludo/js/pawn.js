@@ -144,7 +144,7 @@ Pawn.prototype.step = function (oneStep, isStop) {
         });
 		this.$elem.css("-webkit-transform", "rotate("+rotation+"deg)");
 
-		if (action === ACTION.KILL) {
+		if (action === ACTION.FALL) {
 			Sfx.play('plane_fall');
 		} else if (action === ACTION.OUTOFBASE) {
 			Sfx.play('plane_up');
@@ -160,13 +160,16 @@ Pawn.prototype.step = function (oneStep, isStop) {
 		} else {
 			Sfx.play('move');
 		}
+		if (action === ACTION.KILL && field) {
+			field.kill(this.player);
+		}
 	}
 };
 
 Pawn.prototype.kill = function (field) {
     if (field) {
 		//TODO: play sfx of explosion and back home
-        this.move([{action: ACTION.KILL, postAction: ACTION.NONE,
+        this.move([{action: ACTION.FALL, postAction: ACTION.NONE,
 			field: field}]);
         this.position = -1;
     }

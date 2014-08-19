@@ -163,12 +163,12 @@ Player.prototype.blur = function () {
 
 Player.prototype.move = function (distance, pawn) {
     var steps = [],
-        nextPawns,
+        destPawns,
         nextPos,
         dest, destField,
+		killFields = [],
         i,
-        switchPlayer = false,
-        killOtherPawn = false;
+        switchPlayer = false;
 
     if (!this.isFocused || !pawn) {
         return false;
@@ -211,10 +211,43 @@ Player.prototype.move = function (distance, pawn) {
         switchPlayer = true;
       }
     }
+	if (nextPos > this.arrivePosition)
+		nextPos = this.arrivePosition -
+					(nextPos - this.arrivePosition);
+	dest = this.path[nextPos];
+	destField = this.board.getField(dest);
+
+	function checkKill(player, destF) {
+		var destP = destF.getPawns();
+		if (destP.length > 0 && destP[0].player !== player)
+			return true;
+		return false
+	};
+
+	if (nextPos < this.arrivePosition) {
+		if (checkKill(this, destField)) {
+			steps[steps.length-1].action = ACTION.KILL;
+			killFields.push(destField);
+		}
+	} else if (nextPos === this.arrivePosition) {
+        var field = this.board.getBaseFreeField(this.color);
+        if (field) {
+			steps[steps.length-1].postAction = ACTION.ARRIVE;
+            steps.push({action: ACTION.ARRIVE, postAction: ACTION.NONE,
+				field: field});
+        } else {
+			this.isMoving = false;
+            console.log('no field for pawn back to base');
+			return false;
+        }
+    } else {
+        this.isMoving = false;
+        console.log("out of range nextPos = " + nextPos);
+        return false;
+    }
 
 	// considering JUMP/FLIGHT
-	var destField = this.board.getField(this.path[nextPos]);
-	if (destField.color === this.color) {
+	if (killFields.length === 0 && destField.color === this.color) {
 		if (destField.action === ACTION.JUMP) {
 			steps[steps.length-1].postAction = ACTION.JUMP;
 
@@ -223,80 +256,80 @@ Player.prototype.move = function (distance, pawn) {
 			steps.push({action: ACTION.JUMP, postAction: ACTION.NONE,
 				field: destField});
 
-			if (destField.action === ACTION.FLIGHT) {
+			if (checkKill(this, destField)) {
+				steps[steps.length-1].action = ACTION.KILL;
+				killFields.push(destField);
+			}
+
+			if (killFields.length === 0 && destField.action === ACTION.FLIGHT) {
 				steps[steps.length-1].postAction=ACTION.FLIGHT;
 
+				var flyAcrossField = this.board.getFlyAcrossField(this.color);
 				nextPos = nextPos + this.board.getFLIGHTdelta(destField);
 				destField = this.board.getField(this.path[nextPos]);
+
+				if (checkKill(this, flyAcrossField)) {
+					killFields.push(flyAcrossField);
+					steps.push({action: ACTION.KILL, postAction: ACTION.FLIGHT,
+						field: flyAcrossField});
+				}
 				steps.push({action: ACTION.FLIGHT, postAction: ACTION.NONE,
 					field: destField});
+
+				if (checkKill(this, destField)) {
+					steps[steps.length-1].action = ACTION.KILL;
+					killFields.push(destField);
+				}
 			}
 		} else if (destField.action === ACTION.FLIGHT) {
 			steps[steps.length-1].postAction=ACTION.FLIGHT;
 
+			var flyAcrossField = this.board.getFlyAcrossField(this.color);
+			var isKill1, isKill2;
 			nextPos = nextPos + this.board.getFLIGHTdelta(destField);
 			destField = this.board.getField(this.path[nextPos]);
+
+			if (isKill1 = checkKill(this, flyAcrossField)) {
+				killFields.push(flyAcrossField);
+				steps.push({action: ACTION.KILL, postAction: ACTION.FLIGHT,
+					field: flyAcrossField});
+			}
 			steps.push({action: ACTION.FLIGHT, postAction: ACTION.JUMP,
 				field: destField});
 
-			nextPos = nextPos + this.board.getJUMPdelta(destField);
-			destField = this.board.getField(this.path[nextPos]);
-			steps.push({action: ACTION.JUMP, postAction: ACTION.NONE,
-				field: destField});
+			if (isKill2 = checkKill(this, destField)) {
+				steps[steps.length-1].action = ACTION.KILL;
+				steps[steps.length-1].postAction = ACTION.NONE;
+				killFields.push(destField);
+			}
+
+			if (isKill1 === false && isKill2 === false) {
+				nextPos = nextPos + this.board.getJUMPdelta(destField);
+				destField = this.board.getField(this.path[nextPos]);
+				steps.push({action: ACTION.JUMP, postAction: ACTION.NONE,
+					field: destField});
+
+				if (checkKill(this, destField)) {
+					steps[steps.length-1].action = ACTION.KILL;
+					killFields.push(destField);
+				}
+			}
 		}
 	}
 
     log("player " + this.color + " is moving to path[" + nextPos + "]:" +
         this.path[nextPos]);
 
-    // moving on the board
-    if ((nextPos < this.arrivePosition) ||
-			((nextPos > this.arrivePosition) && (nextPos < this.path.length))) {
-        dest = this.path[nextPos];
-		destField = this.board.getField(dest);
-        nextPawns = destField.getPawns();
-        // pawn stands on next field
-        if (nextPawns.length !== 0) {
-            // this is players pawn - can't move
-            if (nextPawns[0].player === this) {
-                //if (nextPawn != this.getCurrentPawn()) {
-                   // log("choose another pawn, player " + this.color + ": "+ this.pawnIndex +
-                   //     " conflicts with teammate " + nextPawn.pawnIndex);
-                   // this.isMoving = false;
-                   // return false;
-                //}
-            } else {
-                // this is other player's pawn - kill him
-                killOtherPawn = true;
-            }
-        }
-    } else if (nextPos == this.arrivePosition) {
-        var field = this.board.getBaseFreeField(this.color);
-        if (field) {
-			steps[steps.length-1].postAction = ACTION.ARRIVE;
-            steps.push({action: ACTION.ARRIVE, postAction: ACTION.NONE,
-				field: field});
-        } else {
-            console.log('no field for pawn back to base');
-			return false;
-        }
-    } else {
-        this.isMoving = false;
-        log("out of range nextPos = " + nextPos);
-        return false;
-    }
-
     pawn.move(steps,
         function() {
             var player = pawn.player;
 
-            if (killOtherPawn)
-                destField.kill(player);
+            /*if (killFields.length > 0) {
+				for (var e in killFields)
+					killFields[e].kill(player);
+			}*/
 
-            if (nextPos > player.arrivePosition) {
-                nextPos = player.arrivePosition -
-					(nextPos - player.arrivePosition);
-            } else if (nextPos == player.arrivePosition) {
+            if (nextPos == player.arrivePosition) {
                 pawn.arrive();
                 player.numArrived++;
                 if (player.numArrived == 4) {

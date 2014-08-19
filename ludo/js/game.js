@@ -28,6 +28,7 @@ var ACTION = {
 	ARRIVE     : "arrive",
 
 	KILL       : "kill",
+	FALL       : "fall",
 	RESET      : "reset",
 	TURNRIGHT  : "turnright",
 };
