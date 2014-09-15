@@ -73,7 +73,7 @@ Pawn.prototype.move = function (steps, callback) {
             that.step.call(that, oneStep, Pawn.NOT_STOP);
             setTimeout(function () {
                 doStep(steps, callback);
-            }, 400);
+            }, 350);
         } else {
             oneStep = steps[0];
             that.step.call(that, oneStep, Pawn.STOP);
