@@ -186,6 +186,7 @@ Game.prototype = {
             break;
         }
         if (i === 4) {
+            this.current = -1;
             this.gameOver();
             return;
         }
@@ -505,7 +506,16 @@ Game.prototype = {
 		if (user.isDisconnected) {
 			player.stopCountDown();
 			game.doDisconnect(user);
-			game.nextPlayer();
+            game.nextPlayer();
+
+            var player = this.getCurrentPlayer();
+            if (player) {
+                var user = player.getUser();
+                if (user.type === User.TYPE.COMPUTER)
+                    this.board.dice.roll(rollDoneHandler,
+                                    rollDoneHandler_outofbusy);
+            }
+
 			return;
 		}
 
@@ -537,6 +547,15 @@ Game.prototype = {
 			player.stopCountDown();
 			game.doDisconnect(user);
 			game.nextPlayer();
+
+            var player = this.getCurrentPlayer();
+            if (player) {
+                var user = player.getUser();
+                if (user.type === User.TYPE.COMPUTER)
+                    this.board.dice.roll(rollDoneHandler,
+                                    rollDoneHandler_outofbusy);
+            }
+
 			return;
 		}
 
