@@ -510,11 +510,11 @@ Game.prototype = {
 			game.doDisconnect(user);
             game.nextPlayer();
 
-            var player = this.getCurrentPlayer();
+            var player = game.getCurrentPlayer();
             if (player) {
                 var user = player.getUser();
                 if (user.type === User.TYPE.COMPUTER)
-                    this.board.dice.roll(rollDoneHandler,
+                    game.board.dice.roll(rollDoneHandler,
                                     rollDoneHandler_outofbusy);
             }
 
@@ -554,7 +554,7 @@ Game.prototype = {
             if (player) {
                 var user = player.getUser();
                 if (user.type === User.TYPE.COMPUTER)
-                    this.board.dice.roll(rollDoneHandler,
+                    game.board.dice.roll(rollDoneHandler,
                                     rollDoneHandler_outofbusy);
             }
 
