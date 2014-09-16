@@ -192,7 +192,9 @@ Game.prototype = {
         }
 
 		var player = this.getCurrentPlayer();
-		if (player && player.getUser().type === User.TYPE.HUMAN) {
+		if (player) {
+			// TODO need to refine human-player or
+			// disconnected human-player
 			player.setTimeOutStat(false);
 			this.board.hideCountDown();
 		}
