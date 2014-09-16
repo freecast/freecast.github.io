@@ -550,7 +550,7 @@ Game.prototype = {
 			game.doDisconnect(user);
 			game.nextPlayer();
 
-            var player = this.getCurrentPlayer();
+            var player = game.getCurrentPlayer();
             if (player) {
                 var user = player.getUser();
                 if (user.type === User.TYPE.COMPUTER)
