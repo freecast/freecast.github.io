@@ -226,7 +226,7 @@ Game.prototype = {
 		if (next_player.getUser().type === User.TYPE.HUMAN) {
 			next_player.startCountDown(autoActionForRollDice);
 
-			this.proto.notify_itsyourturn(next_player.getUser().senderID);
+			this.proto.notify_itsyourturn(next_player.getUser().senderID, next_player.color);
 		}
 
         this.stat = GAME_STATUS.WAIT_FOR_DICE;

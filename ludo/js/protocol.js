@@ -50,7 +50,7 @@
  *                          notify the new picked up user to be the new game host,
  *                          other clients won't receive this notification
  *
- * itsyourturn_notify
+ * itsyourturn_notify:color
  *                   [s2c]  notify the user to play the game
  *
  * click_reply       [s2c]  reply the user click is handled, either rolling a dice or
@@ -365,9 +365,10 @@ LudoProtocol.prototype.broadcastEndOfGame = function() {
 	this.broadcast(broadcastMsg);
 };
 
-LudoProtocol.prototype.notify_itsyourturn = function(senderID) {
+LudoProtocol.prototype.notify_itsyourturn = function(senderID, color) {
 	var msg = {};
 	msg.command = LudoProtocol.COMMAND.itsyourturn + '_notify';
+	msg.color = color;
 	this.sendMsg(senderID, msg);
 };
 
