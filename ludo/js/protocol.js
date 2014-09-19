@@ -46,7 +46,7 @@
  * disconnect_notify:$color[]
  *                   [s2c]  broadcast to other clients that $color[] get(s) disconnected
  *
- * changehost_notify [s2c]  when original host leaves game,
+ * setashost_notify  [s2c]  when original host leaves game,
  *                          notify the new picked up user to be the new game host,
  *                          other clients won't receive this notification
  *
@@ -96,7 +96,7 @@ B*              <--    startgame_notify  -->
  *
  *    repeat A->B
  *                     disconnect_notify -->                   -->
- *                     changehost_notify -->
+ *                     setashost_notify -->
  *                     pickup_notify     -->                   -->
  *
  *                     endofgame_notify  -->                   -->
@@ -118,6 +118,7 @@ LudoProtocol.COMMAND = {
 	disready:          'disready',
 
 	disconnect:        'disconnect',
+    setashost:         'setashost',
 
 	reset:             'reset',
 	startgame:         'startgame',
@@ -348,6 +349,19 @@ LudoProtocol.prototype.broadcastEndOfGame = function() {
 	broadcastMsg.command =
 		LudoProtocol.COMMAND.endofgame + '_notify';
 	this.broadcast(broadcastMsg);
+};
+
+LudoProtocol.prototype.setAsHost = function(senderID) {
+	var msg = {};
+	msg.command = LudoProtocol.COMMAND.setashost + '_notify';
+	try {
+		this.sendMsg(senderID, msg);
+	} catch(err) {
+		console.error('setashost error: ' + err);
+		msg.ret = false;
+		msg.error = err;
+		this.sendMsg(senderID, msg);
+	}
 };
 
 LudoProtocol.prototype.parseProt_1 = function(senderID, msgObj) {

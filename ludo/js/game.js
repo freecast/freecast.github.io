@@ -298,6 +298,8 @@ Game.prototype = {
 			for (var id in this.users) {
 				new_host = this.users[id];
 				new_host.ishost = true;
+				console.log("pickup a new host: " + new_host.name);
+				this.proto.setAsHost(new_host.senderID);
 				break;
 			}
 			this.user_host = new_host;
