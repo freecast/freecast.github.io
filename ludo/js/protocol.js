@@ -50,6 +50,16 @@
  *                          notify the new picked up user to be the new game host,
  *                          other clients won't receive this notification
  *
+ * itsyourturn_notify
+ *                   [s2c]  notify the user to play the game
+ *
+ * click_reply       [s2c]  reply the user click is handled, either rolling a dice or
+ *                          kick off moving
+ *
+ * next_reply        [s2c]  reply the user next pawn is picked up
+ *
+ * prev_reply        [s2c]  reply the user previous pawn is picked up
+ *
  * startgame_notify  [s2c]
  *
  * endofgame_notify: [s2c]
@@ -123,6 +133,10 @@ LudoProtocol.COMMAND = {
 	reset:             'reset',
 	startgame:         'startgame',
 	endofgame:         'endofgame',
+    itsyourturn:       'itsyourturn',
+    click:             'click',
+	next:              'next',
+	prev:              'prev',
 };
 
 ERROR = {
@@ -349,6 +363,30 @@ LudoProtocol.prototype.broadcastEndOfGame = function() {
 	broadcastMsg.command =
 		LudoProtocol.COMMAND.endofgame + '_notify';
 	this.broadcast(broadcastMsg);
+};
+
+LudoProtocol.prototype.notify_itsyourturn = function(senderID) {
+	var msg = {};
+	msg.command = LudoProtocol.COMMAND.itsyourturn + '_notify';
+	this.sendMsg(senderID, msg);
+};
+
+LudoProtocol.prototype.replyClick = function(senderID) {
+	this.reply_msg(senderID, LudoProtocol.COMMAND.click);
+};
+
+LudoProtocol.prototype.replyNext = function(senderID) {
+	this.reply_msg(senderID, LudoProtocol.COMMAND.next);
+};
+
+LudoProtocol.prototype.replyPrev = function(senderID) {
+	this.reply_msg(senderID, LudoProtocol.COMMAND.prev);
+};
+
+LudoProtocol.prototype.reply_msg = function(senderID, command) {
+	var msg = {};
+	msg.command = LudoProtocol.COMMAND.click + '_reply';
+	this.sendMsg(senderID, msg);
 };
 
 LudoProtocol.prototype.setAsHost = function(senderID) {

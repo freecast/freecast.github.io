@@ -223,8 +223,11 @@ Game.prototype = {
 		this.countDown = this.USER_OP_TIMEOUT;
 		console.log("init countDown=" + this.countDown);
 
-		if (next_player.getUser().type === User.TYPE.HUMAN)
+		if (next_player.getUser().type === User.TYPE.HUMAN) {
 			next_player.startCountDown(autoActionForRollDice);
+
+			this.proto.notify_itsyourturn(next_player.getUser().senderID);
+		}
 
         this.stat = GAME_STATUS.WAIT_FOR_DICE;
     },
@@ -675,13 +678,19 @@ Game.prototype = {
                 player.move(game.board.dice.getValue(),
 						player.getCurrentPawn());
             }
+
+			game.proto.replyClick(channel);
         } else if (msg === 'next') {
             if (game.stat === GAME_STATUS.WAIT_FOR_PAWN) {
                 player.nextPawn();
+
+				game.proto.replyNext(channel);
             }
         } else if (msg === 'prev') {
             if (game.stat === GAME_STATUS.WAIT_FOR_PAWN) {
                 player.prevPawn();
+
+				game.proto.replyPrev(channel);
             }
         }
     }
