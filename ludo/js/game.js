@@ -718,10 +718,13 @@ Game.prototype = {
     document.onkeydown = function(event) {
 		var keyCode = event.keyCode;
 		var ch = "default";
+
+		console.log('key ' + keyCode + ' pressed!');
+
 		/*           | connect   disconnect    ready    click       next        prev
 		 * -------------------------------------------------------------------------
 		 * keyboard1 |   up 38    down 40      ' 222    enter 13   right 39    left 37
-		 * keyboard2 |    i 69      k  68      h  72       o  79     l   76     j   74
+		 * keyboard2 |    i 73      k  75      h  72       o  79     l   76     j   74
 		 *
 		 * add 4 AI:         a
 		 * add multi-users:  u
@@ -731,11 +734,11 @@ Game.prototype = {
 		if (keyCode === 38 || keyCode === 40 || keyCode === 222 ||
 				keyCode === 13 || keyCode === 39 || keyCode === 37)
 			ch = "keyboard1";
-		else if (keyCode === 69 || keyCode === 75 || keyCode === 72 ||
+		else if (keyCode === 73 || keyCode === 75 || keyCode === 72 ||
 				keyCode === 79 || keyCode === 76 || keyCode === 74)
 			ch = "keyboard2";
 
-        if (keyCode === 38 /* 'up' */ || keyCode === 69 /*i*/) {
+        if (keyCode === 38 /* 'up' */ || keyCode === 73 /*i*/) {
 			console.log('key Connect pressed!');
 			handlemsg(ch,
 				'{"MAGIC":"ONLINE", "prot_version":1, "command":"connect", "username":"test"}');
