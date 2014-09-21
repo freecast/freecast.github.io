@@ -235,7 +235,8 @@ Game.prototype = {
 	addPlayer: function (name, color, user) {
     	var player = new Player(name, color, this.board);
 
-        this.players.push(player);
+		var i = this.board.colorToPlayerIndex(color);
+        this.players[i] = player;
 		this.playersColorIndex[color] = player;
 
         // todo convert to component with focus indicator etc.
@@ -487,9 +488,9 @@ Game.prototype = {
         game.board.dice = new Dice('content');
 
         game.addPlayer('Player 1', RED,    game.user_nobody);
-        game.addPlayer('Player 2', GREEN,  game.user_nobody);
         game.addPlayer('Player 3', YELLOW, game.user_nobody);
         game.addPlayer('Player 4', BLUE,   game.user_nobody);
+        game.addPlayer('Player 2', GREEN,  game.user_nobody);
 
         game.stat = GAME_STATUS.WAIT_FOR_CONNECTION;
 

@@ -38,6 +38,18 @@ var BoardSTD = function (id) {
 	this.initDestinations();
 };
 
+BoardSTD.prototype.colorToPlayerIndex = function(color) {
+	if (color === RED)
+		return 0;
+	if (color === YELLOW)
+		return 1;
+	if (color === BLUE)
+		return 2;
+	if (color === GREEN)
+		return 3;
+	return undefined;
+};
+
 BoardSTD.prototype.showCountDown = function(count, color) {
 	//console.log("showCountDown: " + count);
 	if (count < 10)
