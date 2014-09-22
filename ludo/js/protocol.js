@@ -173,7 +173,22 @@ LudoProtocol.prototype.parseProt_1_onConnect = function(senderID, msgObj) {
 		}
 
 		// pickup a player for new user automatically
-		game.pickupAvailPlayer(user);
+		var color;
+		if (color = game.pickupAvailColor()) {
+			var broadcastMsg = {};
+			broadcastMsg.command =
+				LudoProtocol.COMMAND.pickup + '_notify';
+			var player_status = {};
+			player_status.color = color;
+			player_status.user_type = user.type;
+			player_status.isready = user.isready;
+			player_status.username = user.name;
+			broadcastMsg.player_status = player_status;
+			this.broadcast(broadcastMsg);
+
+			var player = game.getPlayerFromColor(color);
+			player.setUser(user);
+		}
 
 		var reply = new Object();
 		reply.command = LudoProtocol.COMMAND.connect + '_reply';

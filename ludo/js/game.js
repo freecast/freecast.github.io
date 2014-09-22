@@ -108,16 +108,16 @@ Game.prototype = {
 		return this.playersColorIndex[color] || null;
 	},
 
-	pickupAvailPlayer: function(user) {
+	pickupAvailColor: function() {
 		var i = 0, p, u;
 		while (p = this.players[i]) {
 			u = p.getUser();
 			if (u.type === User.TYPE.NOBODY) {
-				p.setUser(user);
-				break;
+				return p.color;
 			}
 			i++;
 		}
+		return undefined;
 	},
 
     playAward : function () {
