@@ -98,6 +98,10 @@ Player.prototype.nextPawn = function () {
     this.pawns[prev].blur();
     this.currentPawn = this.getNextAvailPawnIndex(game.board.dice.getValue());
     this.pawns[this.currentPawn].focus();
+
+	if (prev === this.currentPawn)
+		return false;
+	return true;
 }
 Player.prototype.prevPawn = function () {
     var prev = this.currentPawn;
@@ -128,6 +132,10 @@ Player.prototype.prevPawn = function () {
     this.pawns[prev].blur();
     this.currentPawn = current;
     this.pawns[this.currentPawn].focus();
+
+	if (prev === this.currentPawn)
+		return false;
+	return true;
 }
 
 Player.prototype.selectPawnAndMove = function(diceValue) {

@@ -675,23 +675,21 @@ Game.prototype = {
             if (game.stat === GAME_STATUS.WAIT_FOR_DICE) {
                 game.board.dice.roll(rollDoneHandler,
 						rollDoneHandler_outofbusy);
+				game.proto.replyClick(channel);
             } else if (game.stat === GAME_STATUS.WAIT_FOR_PAWN) {
                 player.move(game.board.dice.getValue(),
 						player.getCurrentPawn());
+				game.proto.replyClick(channel);
             }
-
-			game.proto.replyClick(channel);
         } else if (msg === 'next') {
             if (game.stat === GAME_STATUS.WAIT_FOR_PAWN) {
-                player.nextPawn();
-
-				game.proto.replyNext(channel);
+                if (player.nextPawn())
+					game.proto.replyNext(channel);
             }
         } else if (msg === 'prev') {
             if (game.stat === GAME_STATUS.WAIT_FOR_PAWN) {
-                player.prevPawn();
-
-				game.proto.replyPrev(channel);
+                if (player.prevPawn())
+					game.proto.replyPrev(channel);
             }
         }
     }
