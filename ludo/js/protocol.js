@@ -172,6 +172,9 @@ LudoProtocol.prototype.parseProt_1_onConnect = function(senderID, msgObj) {
 			game.waitForStartOfGame();
 		}
 
+		// pickup a player for new user automatically
+		game.pickupAvailPlayer(user);
+
 		var reply = new Object();
 		reply.command = LudoProtocol.COMMAND.connect + '_reply';
 		reply.ret = ret.val;
