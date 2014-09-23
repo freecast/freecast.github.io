@@ -23,13 +23,13 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 840px;
+    width: 1020px;
     height: 640px;
-    margin: -320px 0 0 -400px;
-	display: none;
+    margin: -320px 0 0 -510px;
 }
 
 #board {
+	position: relative;
     float: left;
     width: 640px;
     height: 640px;
@@ -38,6 +38,7 @@ body {
 }
 
 #sidebar {
+	display: none;
     position: relative;
     float: left;
     width: 200px;
@@ -51,6 +52,55 @@ body {
     background: url('../images/sprites.png') 30px -480px no-repeat;
     overflow: hidden;
     list-style-type: none;
+}
+
+#player-info-left {
+    width:    190px;
+	height:   640px;
+	float:    left;
+	position: relative;
+}
+
+#player-info-right {
+    width:    190px;
+	height:   640px;
+	float:    left;
+	position: relative;
+}
+
+.player-info {
+	position:    absolute;
+	width:       170px;
+	height:      40px;
+	/*overflow:    hidden;*/
+    color:       #fff;
+	font-size:   22px;
+    font-weight: bold;
+	font-family: cursive;
+}
+
+.player-info-red {
+	direction:   rtl;
+	left: 0px;
+	top:  540px;
+	padding:0 20px 0 0;
+}
+
+.player-info-yellow {
+	direction:   rtl;
+	left: 0px;
+	top:  0px;
+	padding:0 20px 0 0;
+}
+.player-info-blue {
+	left: 0px;
+	top:  0px;
+	padding:0 0 0 20px;
+}
+.player-info-green {
+	left: 0px;
+	top:  540px;
+	padding:0 0 0 20px;
 }
 
 .icon {

@@ -251,12 +251,6 @@ Game.prototype = {
         this.players[i] = player;
 		this.playersColorIndex[color] = player;
 
-        // todo convert to component with focus indicator etc.
-		var inner = '<div class="icon"></div>';
-        this.playerList.append(
-            '<li id="li-' + color + '" class="player player-' + color + '">' + inner + '</li>'
-        );
-
         player.setUser(user);
     },
 

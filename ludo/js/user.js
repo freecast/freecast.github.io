@@ -16,12 +16,12 @@ function User(type, isready, name, senderID) {
 	this.type = type;
 	this.isready = isready;
 	if (type == User.TYPE.UNAVAILABLE) {
-        name = "N/A";
+        name = "Closed";
 		senderID = undefined;
 	} else if (type == User.TYPE.COMPUTER)
         senderID = name = "AI";
     else if (type == User.TYPE.NOBODY) {
-		name = "Nobody";
+		name = "Please Join";
 		senderID = undefined;
 	}
 

@@ -24,6 +24,7 @@ Pawn.prototype.init = function () {
     this.$elem = $('<div/>')
         .addClass(pawnClass)
         .css({
+			display: 'none',
             left: field.pixelX + 'px',
             top:  field.pixelY + 'px'
         })

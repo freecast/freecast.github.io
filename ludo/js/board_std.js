@@ -95,9 +95,37 @@ BoardSTD.prototype.showArrow = function(color) {
 	this.arrow.show();
 };
 
-BoardSTD.prototype.updatePlayerList = function(color, name) {
-	var e = $('#li-' + color);
-	e.html('<div class="icon"></div>' + name);
+BoardSTD.prototype.addPlayerInfo = function(color, name) {
+	var info_parent;
+	var id = 'id="ul-' + color + '"';
+	var player_name;
+	var css_class = 'class="player-info player-info-' + color + '"';
+
+	if (color === RED || color === YELLOW) {
+		info_parent = $('#player-info-left');
+	}
+	if (color === BLUE || color === GREEN) {
+		info_parent = $('#player-info-right');
+	}
+
+	if (name)
+		player_name = '<ul ' + id + ' ' + css_class + '>' + name + '</ul>';
+	else
+		player_name = '<ul ' + id + ' ' + css_class + '></ul>';
+
+	var player_info_block =
+		'<div class="player-info player-info-' + color + '">' +
+		player_name + '</div>';
+    info_parent.append(player_name);
+};
+
+BoardSTD.prototype.updatePlayerInfo = function(color, name) {
+	var e = $('#ul-' + color);
+	if (e.length) {
+		e.html(name);
+	} else {
+		this.addPlayerInfo(color, name);
+	}
 };
 
 BoardSTD.prototype.getPawnClass = function(color, pawnIndex) {

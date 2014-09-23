@@ -28,10 +28,15 @@ Player.prototype.setUser = function(user) {
 	if (this.user)
 		this.user.removePlayer(this);
 
-	this.board.updatePlayerList(this.color, user.name);
-
     this.user = user;
 	user.addPlayer(this);
+	this.board.updatePlayerInfo(this.color, user.name);
+
+	if (user.type === User.TYPE.HUMAN || user.type === User.TYPE.COMPUTER) {
+		this.showPawns();
+	} else {
+		this.hidePawns();
+	}
 
 	console.log("player-" + this.color +
 			" is occupied by user '" + user.name + "'");
@@ -57,6 +62,24 @@ Player.prototype.initPawns = function () {
         this.board.add(pawn.$elem);
     }
     this.currentPawn = 0;
+};
+
+Player.prototype.hidePawns = function () {
+	var i;
+	for (i = 0; i < 4; i++) {
+		var p;
+		if (p = this.pawns[i])
+			p.$elem.hide();
+	}
+};
+
+Player.prototype.showPawns = function () {
+	var i;
+	for (i = 0; i < 4; i++) {
+		var p;
+		if (p = this.pawns[i])
+			p.$elem.show();
+	}
 };
 
 Player.prototype.getCurrentPawn = function () {
