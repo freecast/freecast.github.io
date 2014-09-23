@@ -73,7 +73,7 @@ Pawn.prototype.move = function (steps, callback) {
             that.step.call(that, oneStep, Pawn.NOT_STOP);
             setTimeout(function () {
                 doStep(steps, callback);
-            }, 350);
+            }, 300);
         } else {
             oneStep = steps[0];
             that.step.call(that, oneStep, Pawn.STOP);
@@ -106,7 +106,7 @@ Pawn.prototype.move = function (steps, callback) {
             }
             that.isMoving = false;
             if (typeof callback === 'function') {
-                callback();
+                setTimeout(function(){callback()}, 600);
             }
         });
     }
@@ -187,6 +187,9 @@ Pawn.prototype.step = function (oneStep, isStop) {
 		}
 		if (action === ACTION.KILL && field) {
 			field.kill(this.player);
+		}
+		if (action === ACTION.ARRIVE) {
+			this.arrive();
 		}
 	}
 };

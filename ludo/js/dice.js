@@ -47,6 +47,7 @@ Dice.prototype.roll = function (callback, cb_outofbusy) {
             that.$elem.removeClass('throw');
 
             that.value = newValue;
+			console.log("dice.roll(): " + newValue);
 			setTimeout(function() {
 				if (typeof callback === 'function')
 					callback(newValue);
@@ -55,7 +56,7 @@ Dice.prototype.roll = function (callback, cb_outofbusy) {
 					if (typeof cb_outofbusy === 'function')
 						cb_outofbusy(newValue);
 				}, 300);
-			}, 300);
+			}, 600);
         }, 200);
     }
 };

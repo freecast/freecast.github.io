@@ -390,7 +390,6 @@ Player.prototype.move = function (distance, pawn) {
 			}*/
 
             if (nextPos == player.arrivePosition) {
-                pawn.arrive();
                 player.numArrived++;
                 if (player.numArrived == 4) {
                     game.numDone++;
