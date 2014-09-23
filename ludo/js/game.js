@@ -734,10 +734,10 @@ Game.prototype = {
 		 * keyboard1 |   up 38    down 40      ' 222    enter 13   right 39    left 37
 		 * keyboard2 |    i 73      k  75      h  72       o  79     l   76     j   74
 		 *
-		 * add 4 AI:         a
-		 * mark unavailable: x
-		 * pickup:           p
-		 * reset:            s
+		 * add a computer user:    a
+		 * add a unavailable user: x
+		 * pickup:                 p
+		 * reset:                  s
 		 */
 		if (keyCode === 38 || keyCode === 40 || keyCode === 222 ||
 				keyCode === 13 || keyCode === 39 || keyCode === 37) {
@@ -773,22 +773,18 @@ Game.prototype = {
             handlemsg(ch, 'prev');
         } else if (keyCode === 65 /*'a'*/) {
 			console.log('key Ai pressed!');
-			if (typeof computer_kicked_off !== 'undefined') {
-				console.log("computer battle already started");
-				return;
+
+			var i = 0, p, u;
+			while (p = game.players[i]) {
+				u = p.getUser();
+				if (u.type === User.TYPE.NOBODY) {
+					p.setUser(game.user_computer);
+					break;
+				}
+				i++;
 			}
-			console.log("computer battle starts");
-			computer_kicked_off = true;
-
-			game.playersColorIndex[RED].setUser(game.user_computer);
-			game.playersColorIndex[GREEN].setUser(game.user_computer);
-			game.playersColorIndex[YELLOW].setUser(game.user_computer);
-			game.playersColorIndex[BLUE].setUser(game.user_computer);
-
-			game.showUI_waitForStartOfGame();
-			game.start();
-            game.board.dice.roll(rollDoneHandler,
-						rollDoneHandler_outofbusy);
+			if (game.isReady())
+				game.start();
         } else if (keyCode === 88 /*'x'*/) {
 			var i = 0, p, u;
 			while (p = game.players[i]) {
@@ -799,6 +795,8 @@ Game.prototype = {
 				}
 				i++;
 			}
+			if (game.isReady())
+				game.start();
 		} else if (keyCode === 80 /* 'p'*/) {
 			console.log('key Pickup pressed!');
 			handlemsg(game.testChannel,
