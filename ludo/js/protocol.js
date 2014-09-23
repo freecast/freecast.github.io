@@ -239,7 +239,7 @@ LudoProtocol.prototype.parseProt_1_onPickup = function(senderID, msgObj) {
 		if (target_user_type == current_user.type)
 			throw "no change for user type";
 
-		console.log("player-" + msgObj.color + " " +
+		console.log("user-" + request_user.name + " player-" + msgObj.color + " " +
 				"ishost:" + request_user.ishost + " requests change: " +
 				"" + current_user.type + "->" + target_user_type);
 		if (request_user.ishost == true) {
@@ -308,6 +308,9 @@ LudoProtocol.prototype.parseProt_1_onPickup = function(senderID, msgObj) {
 
 LudoProtocol.prototype.parseProt_1_onDisconnect = function(senderID, msgObj) {
 	try {
+		var request_user = game.getUserFromSenderID(senderID);
+		console.log('user-' + request_user.name + ' is disconnected');
+
 		game.onDisconnect(senderID);
 	} catch (err) {
 		console.log("disconnect error: " + err);
@@ -322,8 +325,10 @@ LudoProtocol.prototype.parseProt_1_onGetReady = function(senderID, msgObj) {
 		var orig_isready = request_user.isready;
 		request_user.isready = true;
 		reply.ret = true;
-
 		this.sendMsg(senderID, reply);
+
+		console.log('user-' + request_user.name + ' isready:' +
+				orig_isready +' -> true');
 
 		var broadcastMsg = {};
 		broadcastMsg.command = LudoProtocol.COMMAND.getready + '_notify';
@@ -354,6 +359,7 @@ LudoProtocol.prototype.parseProt_1_onReset = function(senderID, msgObj) {
 		if (request_user.ishost === false)
 			throw ERROR.EPERM;
 
+		console.log('user-' + request_user.name + ' resets the game');
 		game.reset();
 
 		var broadcastMsg = {};
@@ -423,6 +429,7 @@ LudoProtocol.prototype.setAsHost = function(senderID) {
 
 LudoProtocol.prototype.parseProt_1 = function(senderID, msgObj) {
 	try {
+		console.log('parseProt_1 start_of_handling "' + msgObj.command + '"');
 		switch (msgObj.command) {
 			case LudoProtocol.COMMAND.connect:
 				this.parseProt_1_onConnect(senderID, msgObj);
@@ -453,8 +460,10 @@ LudoProtocol.prototype.parseProt_1 = function(senderID, msgObj) {
 			default:
 				break;
 		}
+		console.log('parseProt_1 end_of_handling "' + msgObj.command + '"');
 	} catch (err) {
-    	console.log('parseProt_1 error: ' + err);
+		console.log('parseProt_1 err_of_handling "' + msgObj.command + '", ' +
+				'err=' + err);
 		return false;
 	}
 };

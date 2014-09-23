@@ -473,7 +473,7 @@ Game.prototype = {
 
         // handler for the CastMessageBus message event
         game.messageBus.onMessage = function(event) {
-          console.log('Message [' + event.senderId + ']: ' + event.data);
+          console.log('RecvMsg[' + event.senderId + '] ' + event.data);
           // display the message from the sender
           //displayText(event.data);
           // inform all senders on the CastMessageBus of the incoming message event
@@ -707,9 +707,6 @@ Game.prototype = {
     }
 
     function handlemsg(channel, msg) {
-        console.log("'" + msg +
-			"' received in handlemsg from channel " + channel);
-
         if (typeof msg === "string") {
             var msgObj = null;
             try {
