@@ -82,7 +82,7 @@ body {
 .player-info-red {
 	direction:   rtl;
 	left: 0px;
-	top:  540px;
+	top:  565px;
 	padding:0 20px 0 0;
 }
 
@@ -99,7 +99,7 @@ body {
 }
 .player-info-green {
 	left: 0px;
-	top:  540px;
+	top:  565px;
 	padding:0 0 0 20px;
 }
 
@@ -357,26 +357,26 @@ body {
 }
 
 .dice-wrap-red {
-    top:  430px;
-    left: 50px;
+    top:  450px;
+    left: 80px;
     background-color: #f65624;
 }
 
 .dice-wrap-yellow {
-    top:  200px;
-    left: 50px;
+    top:  100px;
+    left: 80px;
     background-color: #fed807;
 }
 
 .dice-wrap-blue {
-    top:  200px;
-    left: 880px;
+    top:  100px;
+    left: 855px;
     background-color: #0f8ad0;
 }
 
 .dice-wrap-green {
-    top:  430px;
-    left: 880px;
+    top:  450px;
+    left: 855px;
     background-color: #13d213;
 }
 

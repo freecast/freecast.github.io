@@ -60,20 +60,20 @@ BoardSTD.prototype.showCountDown = function(count, color) {
 
 	if (color === GREEN) {
 		$('#countdown').css('background-color', '#13d213');
-		$('#countdown').css('top',  '430px');
-		$('#countdown').css('left', '965px');
+		$('#countdown').css('top',  '450px');
+		$('#countdown').css('left', '940px');
 	} else if (color === RED) {
 		$('#countdown').css('background-color', '#f65624');
-		$('#countdown').css('top',  '430px');
-		$('#countdown').css('left', '-47px');
+		$('#countdown').css('top',  '450px');
+		$('#countdown').css('left', '-15px');
 	} else if (color === YELLOW) {
 		$('#countdown').css('background-color', '#fed807');
-		$('#countdown').css('top',  '200px');
-		$('#countdown').css('left', '-47px');
+		$('#countdown').css('top',  '100px');
+		$('#countdown').css('left', '-15px');
 	} else if (color === BLUE) {
 		$('#countdown').css('background-color', '#0f8ad0');
-		$('#countdown').css('top',  '200px');
-		$('#countdown').css('left', '965px');
+		$('#countdown').css('top',  '100px');
+		$('#countdown').css('left', '940px');
 	}
 
 	this.countdownColor = color;
