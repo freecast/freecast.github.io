@@ -61,7 +61,7 @@ BoardSTD.prototype.showCountDown = function(count, color) {
 	if (color === GREEN) {
 		$('#countdown').css('background-color', '#13d213');
 		$('#countdown').css('top',  '275px');
-		$('#countdown').css('left', '940px');
+		$('#countdown').css('left', '845px');
 	} else if (color === RED) {
 		$('#countdown').css('background-color', '#f65624');
 		$('#countdown').css('top',  '275px');
