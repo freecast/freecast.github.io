@@ -19,6 +19,7 @@ function (x, y, color, action, pixelX, pixelY,
     this.y = y;
     this.pawn = null;
 	this.pawns = {};
+	this.numPawns = 0;
 
 	this.color = color;
 	this.action = action;
@@ -54,14 +55,22 @@ Field.prototype.addPawn = function (pawn) {
 		return;
 	}
 	this.pawns[key] = pawn;
+	this.numPawns++;
+
 	pawn.field = this;
 	pawn.x = this.x;
 	pawn.y = this.y;
+	pawn.$elem.css({
+		left: (this.pixelX + (this.numPawns-1)*3) + 'px',
+		 top: (this.pixelY + (this.numPawns-1)*3) + 'px',
+	});
+	pawn.$elem.css('z-index', '' + this.numPawns-1);
 };
 
 Field.prototype.removePawn = function (pawn) {
 	var key = pawn.getKey();
 	if (this.pawns[key]) {
+		this.numPawns--;
 		delete this.pawns[key];
 		pawn.field = null;
 	} else {

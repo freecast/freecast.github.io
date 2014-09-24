@@ -18,7 +18,6 @@ Pawn.prototype.init = function () {
 
 	var field =
 		player.board.getBaseFreeField(this.player.color);
-	field.addPawn(this);
 
 	var pawnClass = player.board.getPawnClass(player.color, this.pawnIndex);
     this.$elem = $('<div/>')
@@ -44,6 +43,8 @@ Pawn.prototype.init = function () {
             }
         });
 	this.$elem.css("-webkit-transform", "rotate("+field.rotForPass+"deg)");
+
+	field.addPawn(this);
 };
 
 Pawn.prototype.focus = function () {
@@ -76,6 +77,7 @@ Pawn.prototype.move = function (steps, callback) {
                 doStep(steps, callback);
             }, 300);
         } else {
+			that.$elem.css('z-index', '0');
             oneStep = steps[0];
             that.step.call(that, oneStep, Pawn.STOP);
 
@@ -100,6 +102,7 @@ Pawn.prototype.move = function (steps, callback) {
             this.field.removePawn(this);
         }
 
+		this.$elem.css('z-index', '1');
         doStep(steps, function (lastStep) {
 			var field = lastStep.field;
             if (field) {
