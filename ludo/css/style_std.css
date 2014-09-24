@@ -310,7 +310,7 @@ body {
     position: absolute;
     top: 280px;
     left: 670px;
-    width: 100px;
+    width: 90px;
     height: 90px;
     line-height: 90px;
     color: #fff;
@@ -318,35 +318,66 @@ body {
     font-size: 75px;
 	text-align: center;
     border: 0 solid;
-	border-radius: 45px;
-    padding: 5px;
+	border-radius: 40px;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+
+.countdown-red {
+    top:  430px;
+    left: -60px;
+}
+
+.countdown-yellow {
+    top:  200px;
+    left: -60px;
+}
+
+.countdown-blue {
+    top:  200px;
+    left: 990px;
+}
+
+.countdown-green {
+    top:  430px;
+    left: 990px;
 }
 
 .dice-wrap {
     position: absolute;
-    top: 485px;
-    left: 675px;
+    top:  430px;
+    left: 50px;
     width: 90px;
     height: 90px;
     background-image: url('../images/dice.png');
     background-position: 0 -75px;
     -webkit-transition: top .1s linear, left .1s linear;
+	border: 0 solid;
+	border-radius: 40px;
 }
 
 .dice-wrap-red {
+    top:  430px;
+    left: 50px;
     background-color: #f65624;
 }
 
-.dice-wrap-green {
-    background-color: #13d213;
-}
-
 .dice-wrap-yellow {
+    top:  200px;
+    left: 50px;
     background-color: #fed807;
 }
 
 .dice-wrap-blue {
+    top:  200px;
+    left: 880px;
     background-color: #0f8ad0;
+}
+
+.dice-wrap-green {
+    top:  430px;
+    left: 880px;
+    background-color: #13d213;
 }
 
 @-webkit-keyframes focusdice {

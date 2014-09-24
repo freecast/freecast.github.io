@@ -3,6 +3,7 @@ var BoardSTD = function (id) {
 	document.getElementById('board_style').href="css/style_std.css";
 	this.arrow = $('.arrow');
 	this.arrowColor = undefined;
+	this.countdownColor = undefined;
 
 	this.pawnPixels = 36;
     
@@ -56,22 +57,35 @@ BoardSTD.prototype.showCountDown = function(count, color) {
 		$('#countdown').html('0'+count);
 	else
 		$('#countdown').html(''+count);
-	$('#countdown').show();
 
-	if (color === GREEN)
+	if (color === GREEN) {
 		$('#countdown').css('background-color', '#13d213');
-	else if (color === RED)
+		$('#countdown').css('top',  '430px');
+		$('#countdown').css('left', '965px');
+	} else if (color === RED) {
 		$('#countdown').css('background-color', '#f65624');
-	else if (color === YELLOW)
+		$('#countdown').css('top',  '430px');
+		$('#countdown').css('left', '-47px');
+	} else if (color === YELLOW) {
 		$('#countdown').css('background-color', '#fed807');
-	else if (color === BLUE)
+		$('#countdown').css('top',  '200px');
+		$('#countdown').css('left', '-47px');
+	} else if (color === BLUE) {
 		$('#countdown').css('background-color', '#0f8ad0');
+		$('#countdown').css('top',  '200px');
+		$('#countdown').css('left', '965px');
+	}
 
+	this.countdownColor = color;
+
+	$('#countdown').addClass('countdown-' + this.countdownColor);
+	$('#countdown').show();
 };
 
 BoardSTD.prototype.hideCountDown = function() {
 	console.log('hideCountDown');
 	$('#countdown').hide();
+	$('#countdown').removeClass('countdown-' + this.countdownColor);
 };
 
 BoardSTD.prototype.resetArrow = function() {

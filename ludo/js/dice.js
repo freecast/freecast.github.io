@@ -86,14 +86,14 @@ Dice.prototype.focus = function () {
     this.$elem.addClass('focused');
     this.$diceelem.addClass('focused');
     this.isFocused = true;
-	this.showHint();
+	//this.showHint();
 };
 
 Dice.prototype.blur = function () {
     this.$elem.removeClass('focused');
     this.$diceelem.removeClass('focused');
     this.isFocused = false;
-	this.hideHint();
+	//this.hideHint();
 };
 
 Dice.prototype.setPlayer = function(player) {
