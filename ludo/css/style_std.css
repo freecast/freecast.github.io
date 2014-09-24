@@ -345,8 +345,8 @@ body {
 
 .dice-wrap {
     position: absolute;
-    top:  430px;
-    left: 50px;
+    top:  450px;
+    left: 80px;
     width: 90px;
     height: 90px;
     background-image: url('../images/dice.png');
