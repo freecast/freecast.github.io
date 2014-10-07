@@ -6,7 +6,7 @@ var BoardSTD = function (id) {
 	this.countdownColor = undefined;
 
 	this.pawnPixels = 36;
-    
+
     this.fields = [];
     this.path = [
         [4, 14], [4, 13], [4, 12], [4, 11],
@@ -37,6 +37,17 @@ var BoardSTD = function (id) {
     this.loadFields();
 	this.initBases();
 	this.initDestinations();
+
+    this.$elem.append('<div id="game_over_info"><ul>Game Over</ul></div>');
+	$('#game_over_info').hide();
+};
+
+BoardSTD.prototype.showGameOver = function() {
+	$('#game_over_info').show();
+};
+
+BoardSTD.prototype.hideGameOver = function() {
+	$('#game_over_info').hide();
 };
 
 BoardSTD.prototype.colorToPlayerIndex = function(color) {
@@ -131,6 +142,7 @@ BoardSTD.prototype.addPlayerInfo = function(color, name) {
 		'<div class="player-info player-info-' + color + '">' +
 		player_name + '</div>';
     info_parent.append(player_name);
+	info_parent.append('<div id="rank-' + color + '" class="rank-info">');
 };
 
 BoardSTD.prototype.updatePlayerInfo = function(color, name) {
@@ -140,6 +152,16 @@ BoardSTD.prototype.updatePlayerInfo = function(color, name) {
 	} else {
 		this.addPlayerInfo(color, name);
 	}
+};
+
+BoardSTD.prototype.showRank = function(color, rank) {
+	console.log("" + color + " got rank " + rank);
+    $("#rank-" + color).css("background",
+			"url('images/standard/ranking_" + rank + ".png')");
+};
+
+BoardSTD.prototype.hideRank = function(color) {
+    $("#rank-" + color).css("background", "");
 };
 
 BoardSTD.prototype.getPawnClass = function(color, pawnIndex) {

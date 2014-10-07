@@ -96,6 +96,14 @@ Dice.prototype.blur = function () {
 	//this.hideHint();
 };
 
+Dice.prototype.show = function() {
+	this.$elem.show();
+};
+
+Dice.prototype.hide = function() {
+	this.$elem.hide();
+};
+
 Dice.prototype.setPlayer = function(player) {
 	if (this.color !== undefined) {
         this.$elem.removeClass('dice-wrap-' + this.color);

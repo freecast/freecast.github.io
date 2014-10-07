@@ -41,6 +41,7 @@ function Game() {
 	this.players = [];
 	this.playersColorIndex = {};
 	this.playerList = null;
+	this.numOfPlayer = 0;
 
 	this.USER_OP_TIMEOUT = 20;
 	this.countDown = this.USER_OP_TIMEOUT;
@@ -149,13 +150,21 @@ Game.prototype = {
 		return true;
 	},
 	gameOver: function() {
-       this.getCurrentPlayer().blur();
-       this.board.hideArrow();
-       console.log('all players are done, need to restart the game');
-       this.stat = GAME_STATUS.GAME_OVER;
-       this.proto.broadcastEndOfGame();
-	},
+        this.getCurrentPlayer().blur();
+        this.board.hideArrow();
+        this.board.dice.hide();
+        this.board.hideCountDown();
+        this.current = -1;
+        console.log('all players are done, need to restart the game');
 
+        this.stat = GAME_STATUS.GAME_OVER;
+        this.board.showGameOver();
+        this.proto.broadcastEndOfGame();
+	},
+	playerFinish: function(color) {
+		this.numDone++;
+		this.board.showRank(color, this.numDone);
+	},
     nextPlayer : function () {
         var next = this.current,
             i = 0;
@@ -197,8 +206,7 @@ Game.prototype = {
             }
             break;
         }
-        if (i === 4) {
-            this.current = -1;
+        if (this.numDone === this.numOfPlayer-1) {
             this.gameOver();
             return;
         }
@@ -229,8 +237,10 @@ Game.prototype = {
 
 		this.board.showArrow(this.getCurrentPlayer().color);
         //game.players[game.current].focus();
+		this.board.dice.hide();
         this.board.dice.focus();
         this.board.dice.setPlayer(this.getCurrentPlayer());
+		this.board.dice.show();
 
 		this.countDown = this.USER_OP_TIMEOUT;
 		console.log("init countDown=" + this.countDown);
@@ -411,9 +421,17 @@ Game.prototype = {
 			return;
 		this.stat = GAME_STATUS.RESET;
 
-		if (this.getCurrentPlayer().isMoving)
-			return;
+		var p = this.getCurrentPlayer();
+		if (p) {
+			if (p.isMoving)
+				return;
+		}
 
+		this.board.hideGameOver();
+		this.board.hideRank(RED);
+		this.board.hideRank(YELLOW);
+		this.board.hideRank(BLUE);
+		this.board.hideRank(GREEN);
 		this.doReset();
 		this.stat = GAME_STATUS.WAIT_FOR_READY;
 	},
@@ -777,6 +795,7 @@ Game.prototype = {
 				}
 				i++;
 			}
+			game.waitForStartOfGame();
 			if (game.isReady())
 				game.start();
         } else if (keyCode === 88 /*'x'*/) {
@@ -803,8 +822,7 @@ Game.prototype = {
 				'{"MAGIC":"ONLINE", "prot_version":1, "command":"pickup", "color":"blue", "user_type":"human"}');
 		} else if (keyCode === 83 /* 's' reSet*/) {
 			console.log('key reSet pressed!');
-			game.testChannel = "keyboard";
-			handlemsg(game.testChannel,
+			handlemsg(game.user_host.senderID,
 				'{"MAGIC":"ONLINE", "prot_version":1, "command":"reset"}');
 		} else {
 			console.log('key ' + keyCode + ' pressed, ignore!');

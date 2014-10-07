@@ -33,6 +33,7 @@ Player.prototype.setUser = function(user) {
 	this.board.updatePlayerInfo(this.color, user.name);
 
 	if (user.type === User.TYPE.HUMAN || user.type === User.TYPE.COMPUTER) {
+		game.numOfPlayer++;
 		this.showPawns();
 	} else {
 		this.hidePawns();
@@ -415,7 +416,7 @@ Player.prototype.move = function (distance, pawn) {
             if (nextPos == player.arrivePosition) {
                 player.numArrived++;
                 if (player.numArrived == 4) {
-                    game.numDone++;
+					game.playerFinish(player.color);
 					console.log("player-" + player.color +
 						" finished");
                 }

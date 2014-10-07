@@ -68,6 +68,42 @@ body {
 	position: relative;
 }
 
+.rank-info {
+    position: absolute;
+    width: 56px;
+    height: 60px;
+    z-index: 2;
+}
+
+#rank-red {
+    left: 110px;
+    top: 490px;
+}
+
+#rank-yellow {
+    left: 110px;
+    top: 90px;
+}
+
+#rank-blue {
+    left: 24px;
+    top: 90px;
+}
+
+#rank-green {
+    left: 24px;
+    top: 490px;
+}
+
+#game_over_info {
+	position:    absolute;
+	font-size:   100px;
+	font-weight: bold;
+	z-index:     2;
+	top:         150px;
+	left:        25px;
+}
+
 .player-info {
 	position:    absolute;
 	width:       170px;
