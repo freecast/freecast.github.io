@@ -49,6 +49,11 @@ Player.prototype.setUser = function(user) {
 		new_type = 0;
 		this.hidePawns();
 	}
+	if (user.type === User.TYPE.UNAVAILABLE) {
+		this.board.hideBase(this.color);
+	} else {
+		this.board.showBase(this.color);
+	}
 	if (old_type === 0 && new_type === 1)
 		game.numOfPlayer++;
 	if (old_type === 1 && new_type === 0)

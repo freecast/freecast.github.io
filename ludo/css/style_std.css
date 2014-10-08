@@ -54,6 +54,41 @@ body {
     list-style-type: none;
 }
 
+.base_mask {
+	display:  none;
+	position: absolute;
+	opacity:  .8;
+	background-color: #000000;
+}
+
+#base_mask_red {
+	width:    151px;
+	height:   151px;
+	top:      489px;
+	left:     0px;
+}
+
+#base_mask_yellow {
+	width:    151px;
+	height:   149px;
+	top:      0px;
+	left:     0px;
+}
+
+#base_mask_blue {
+	width:    151px;
+	height:   149px;
+	top:      0px;
+	left:     490px;
+}
+
+#base_mask_green {
+	width:    151px;
+	height:   151px;
+	top:      489px;
+	left:     490px;
+}
+
 #player-info-left {
     width:    190px;
 	height:   640px;

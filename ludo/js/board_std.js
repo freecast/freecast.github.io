@@ -40,6 +40,19 @@ var BoardSTD = function (id) {
 
     this.$elem.append('<div id="game_over_info"><ul>Game Over</ul></div>');
 	$('#game_over_info').hide();
+
+	this.$elem.append('<div class="base_mask" id="base_mask_red"></div>');
+	this.$elem.append('<div class="base_mask" id="base_mask_yellow"></div>');
+	this.$elem.append('<div class="base_mask" id="base_mask_blue"></div>');
+	this.$elem.append('<div class="base_mask" id="base_mask_green"></div>');
+};
+
+BoardSTD.prototype.showBase = function(color) {
+	$('#base_mask_'+color).hide();
+};
+
+BoardSTD.prototype.hideBase = function(color) {
+	$('#base_mask_'+color).show();
 };
 
 BoardSTD.prototype.showGameOver = function() {
