@@ -210,6 +210,11 @@ Game.prototype = {
             this.gameOver();
             return;
         }
+		// due to disconnection, there's possibly no player available to move
+		if (i === 4) {
+			console.log("no available player for nextPlayer()");
+			return;
+		}
 
 		var player = this.getCurrentPlayer();
 		if (player) {
@@ -385,13 +390,23 @@ Game.prototype = {
 	},
 
 	doReset: function() {
+		// game over information
+		this.board.hideGameOver();
+
+		// rank
+		this.board.hideRank(RED);
+		this.board.hideRank(YELLOW);
+		this.board.hideRank(BLUE);
+		this.board.hideRank(GREEN);
+
 		// arrow
 		this.board.resetArrow();
 
 		// dice
 		this.board.dice.busy = false;
-		this.board.dice.blur();
+		this.board.dice.hide();
 
+		// count down
 		if (this.countDownPlayer) {
 			this.countDownPlayer.stopCountDown();
 			this.board.hideCountDown();
@@ -427,11 +442,6 @@ Game.prototype = {
 				return;
 		}
 
-		this.board.hideGameOver();
-		this.board.hideRank(RED);
-		this.board.hideRank(YELLOW);
-		this.board.hideRank(BLUE);
-		this.board.hideRank(GREEN);
 		this.doReset();
 		this.stat = GAME_STATUS.WAIT_FOR_READY;
 	},
