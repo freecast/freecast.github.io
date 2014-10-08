@@ -36,6 +36,7 @@ Player.prototype.setUser = function(user) {
 		game.numOfPlayer++;
 		this.showPawns();
 	} else {
+		game.numOfPlayer--;
 		this.hidePawns();
 	}
 
