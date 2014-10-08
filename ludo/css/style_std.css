@@ -380,6 +380,7 @@ body {
 }
 
 .dice-wrap {
+	display: none;
     position: absolute;
     top:  450px;
     left: 80px;
