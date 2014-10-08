@@ -25,20 +25,34 @@ Player.prototype.getTimeOutStat = function() {
 };
 
 Player.prototype.setUser = function(user) {
-	if (this.user)
+	var old_type, new_type;
+	if (this.user) {
+		if (this.user.type === User.TYPE.HUMAN ||
+				this.user.type === User.TYPE.COMPUTER) {
+			old_type = 1;
+		} else {
+			old_type = 0;
+		}
 		this.user.removePlayer(this);
+	} else {
+		old_type = 0;
+	}
 
     this.user = user;
 	user.addPlayer(this);
 	this.board.updatePlayerInfo(this.color, user.name);
 
 	if (user.type === User.TYPE.HUMAN || user.type === User.TYPE.COMPUTER) {
-		game.numOfPlayer++;
+		new_type = 1;
 		this.showPawns();
 	} else {
-		game.numOfPlayer--;
+		new_type = 0;
 		this.hidePawns();
 	}
+	if (old_type === 0 && new_type === 1)
+		game.numOfPlayer++;
+	if (old_type === 1 && new_type === 0)
+		game.numOfPlayer--;
 
 	console.log("player-" + this.color +
 			" is occupied by user '" + user.name + "'");
