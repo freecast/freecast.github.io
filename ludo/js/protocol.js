@@ -161,15 +161,20 @@ LudoProtocol.prototype.parseProt_1_onConnect = function(senderID, msgObj) {
 			throw ERROR.EBUSY;
 		}
 
-		var user = new User(User.TYPE.HUMAN, User.UNREADY,
-				msgObj.username, senderID);
-		ret = game.addUser(user);
-		if (ret.val && user.ishost) {
-			console.log('LudoProtocol version(' +
-						msgObj.prot_version +
-						') is set the same as host');
-			this.prot_version = msgObj.prot_version;
-			game.waitForStartOfGame();
+		var user;
+		if (game.users[senderID]) {
+			user = game.users[senderID];
+		} else {
+			user = new User(User.TYPE.HUMAN, User.UNREADY,
+					msgObj.username, senderID);
+			ret = game.addUser(user);
+			if (ret.val && user.ishost) {
+				console.log('LudoProtocol version(' +
+							msgObj.prot_version +
+							') is set the same as host');
+				this.prot_version = msgObj.prot_version;
+				game.waitForStartOfGame();
+			}
 		}
 
 		// pickup a player for new user automatically
@@ -248,7 +253,7 @@ LudoProtocol.prototype.parseProt_1_onPickup = function(senderID, msgObj) {
 			else if (target_user_type == User.TYPE.UNAVAILABLE)
 				new_user = game.user_unavailable;
 			else if (target_user_type == User.TYPE.NOBODY)
-				new_user = game.user_nobody;
+				new_user = game.user_nobody[msgObj.color];
 			else if (target_user_type == User.TYPE.HUMAN)
 				new_user = request_user;
 		} else if (current_user.type == User.TYPE.COMPUTER ||
@@ -265,7 +270,7 @@ LudoProtocol.prototype.parseProt_1_onPickup = function(senderID, msgObj) {
 		} else if (target_user_type == User.TYPE.NOBODY) {
 			if (current_user.type == User.TYPE.HUMAN) {
 				if (request_user == current_user) {
-					new_user = game.user_nobody;
+					new_user = game.user_nobody[msgObj.color];
 				} else {
 					throw ERROR.EPERM;
 				}
@@ -329,6 +334,11 @@ LudoProtocol.prototype.parseProt_1_onGetReady = function(senderID, msgObj) {
 
 		console.log('user-' + request_user.name + ' isready:' +
 				orig_isready +' -> true');
+		if (orig_isready === false) {
+			for (c in request_user.players) {
+				game.board.updatePlayerInfo(c, request_user.name);
+			}
+		}
 
 		var broadcastMsg = {};
 		broadcastMsg.command = LudoProtocol.COMMAND.getready + '_notify';

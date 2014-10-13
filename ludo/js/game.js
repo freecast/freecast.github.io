@@ -59,8 +59,11 @@ function Game() {
 		new User(User.TYPE.COMPUTER, User.READY);
 	this.user_unavailable =
 		new User(User.TYPE.UNAVAILABLE, User.UNREADY);
-	this.user_nobody =
-		new User(User.TYPE.NOBODY, User.UNREADY);
+	this.user_nobody = {};
+	this.user_nobody[RED] = new User(User.TYPE.NOBODY, User.UNREADY);
+	this.user_nobody[YELLOW] = new User(User.TYPE.NOBODY, User.UNREADY);
+	this.user_nobody[BLUE] = new User(User.TYPE.NOBODY, User.UNREADY);
+	this.user_nobody[GREEN] = new User(User.TYPE.NOBODY, User.UNREADY);
 
 	this.user_host = null;
 
@@ -302,7 +305,7 @@ Game.prototype = {
 
 		for (c in user.players) {
 			p = user.players[c];
-			p.setUser(this.user_nobody);
+			p.setUser(this.user_nobody[c]);
 			//p.reset();
 
 			notify.command = LudoProtocol.COMMAND.pickup + '_notify';
@@ -332,10 +335,10 @@ Game.prototype = {
 
 		if (this.num_user === 0) {
 			this.reset();
-			game.playersColorIndex[RED].setUser(game.user_nobody);
-			game.playersColorIndex[GREEN].setUser(game.user_nobody);
-			game.playersColorIndex[YELLOW].setUser(game.user_nobody);
-			game.playersColorIndex[BLUE].setUser(game.user_nobody);
+			game.playersColorIndex[RED].setUser(game.user_nobody[RED]);
+			game.playersColorIndex[GREEN].setUser(game.user_nobody[GREEN]);
+			game.playersColorIndex[YELLOW].setUser(game.user_nobody[YELLOW]);
+			game.playersColorIndex[BLUE].setUser(game.user_nobody[BLUE]);
 			return;
 		}
 	},
@@ -521,10 +524,10 @@ Game.prototype = {
         game.board = new BoardSTD('board');
         game.board.dice = new Dice('content');
 
-        game.addPlayer('Player 1', RED,    game.user_nobody);
-        game.addPlayer('Player 3', YELLOW, game.user_nobody);
-        game.addPlayer('Player 4', BLUE,   game.user_nobody);
-        game.addPlayer('Player 2', GREEN,  game.user_nobody);
+        game.addPlayer('Player 1', RED,    game.user_nobody[RED]);
+        game.addPlayer('Player 3', YELLOW, game.user_nobody[YELLOW]);
+        game.addPlayer('Player 4', BLUE,   game.user_nobody[BLUE]);
+        game.addPlayer('Player 2', GREEN,  game.user_nobody[GREEN]);
 
         game.stat = GAME_STATUS.WAIT_FOR_CONNECTION;
 

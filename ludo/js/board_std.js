@@ -41,6 +41,11 @@ var BoardSTD = function (id) {
     this.$elem.append('<div id="game_over_info"><ul>Game Over</ul></div>');
 	$('#game_over_info').hide();
 
+	this.$elem.append('<div class="player-stat" id="player-stat-red"></div>');
+	this.$elem.append('<div class="player-stat" id="player-stat-yellow"></div>');
+	this.$elem.append('<div class="player-stat" id="player-stat-blue"></div>');
+	this.$elem.append('<div class="player-stat" id="player-stat-green"></div>');
+
 	this.$elem.append('<div class="base_mask" id="base_mask_red"></div>');
 	this.$elem.append('<div class="base_mask" id="base_mask_yellow"></div>');
 	this.$elem.append('<div class="base_mask" id="base_mask_blue"></div>');
@@ -158,12 +163,23 @@ BoardSTD.prototype.addPlayerInfo = function(color, name) {
 	info_parent.append('<div id="rank-' + color + '" class="rank-info">');
 };
 
-BoardSTD.prototype.updatePlayerInfo = function(color, name) {
+BoardSTD.prototype.updatePlayerInfo = function(color, name, stat) {
 	var e = $('#ul-' + color);
 	if (e.length) {
 		e.html(name);
 	} else {
 		this.addPlayerInfo(color, name);
+	}
+	e = $('#player-stat-' + color);
+	e.html('');
+	if (stat) {
+		if (stat === 'notready')
+			e.html('not ready');
+		else if (stat === 'disconnected')
+			e.html('disconnected');
+		e.removeClass(color+'-notready');
+		e.removeClass(color+'-disconnected');
+		e.addClass('' + color + '-' + stat);
 	}
 };
 

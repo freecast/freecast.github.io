@@ -25,7 +25,9 @@ Player.prototype.getTimeOutStat = function() {
 };
 
 Player.prototype.setUser = function(user) {
-	var old_type, new_type;
+	var old_type, new_type, stat;
+	var username = user.name;
+
 	if (this.user) {
 		if (this.user.type === User.TYPE.HUMAN ||
 				this.user.type === User.TYPE.COMPUTER) {
@@ -38,9 +40,21 @@ Player.prototype.setUser = function(user) {
 		old_type = 0;
 	}
 
+	if (user.isready === false && user.type === User.TYPE.HUMAN)
+		stat = 'notready';
+	if (this.user) {
+		if (this.user.type === User.TYPE.HUMAN &&
+				user.type === User.TYPE.NOBODY) {
+			if (game.stat === GAME_STATUS.WAIT_FOR_PAWN ||
+					game.stat === GAME_STATUS.WAIT_FOR_DICE) {
+				stat = "disconnected";
+				username = this.user.name;
+			}
+		}
+	}
     this.user = user;
 	user.addPlayer(this);
-	this.board.updatePlayerInfo(this.color, user.name);
+	this.board.updatePlayerInfo(this.color, username, stat);
 
 	if (user.type === User.TYPE.HUMAN || user.type === User.TYPE.COMPUTER) {
 		new_type = 1;
