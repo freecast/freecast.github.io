@@ -167,6 +167,7 @@ Game.prototype = {
 	playerFinish: function(color) {
 		this.numDone++;
 		this.board.showRank(color, this.numDone);
+		Sfx.play('win_cheer');
 	},
     nextPlayer : function () {
         var next = this.current,
