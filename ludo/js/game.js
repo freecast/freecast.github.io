@@ -131,6 +131,11 @@ Game.prototype = {
 		var player = this.getCurrentPlayer();
 		var user = player.getUser();
 
+		if (user.type === User.TYPE.HUMAN) {
+			this.board.hideUserOpHint();
+			this.board.showUserOpHint('click', player.color);
+		}
+
 		if (user.type === User.TYPE.HUMAN &&
 				player.getTimeOutStat() === false)
 			player.startCountDown(autoActionForRollDice);
@@ -226,6 +231,7 @@ Game.prototype = {
 			// disconnected human-player
 			player.setTimeOutStat(false);
 			this.board.hideCountDown();
+			this.board.hideUserOpHint(player.color);
 		}
 
 		var next_player = this.getPlayerFromIndex(next);
@@ -255,6 +261,7 @@ Game.prototype = {
 		console.log("init countDown=" + this.countDown);
 
 		if (next_player.getUser().type === User.TYPE.HUMAN) {
+			this.board.showUserOpHint('click', next_player.color);
 			next_player.startCountDown(autoActionForRollDice);
 
 			this.proto.notify_itsyourturn(next_player.getUser().senderID, next_player.color);
@@ -632,6 +639,7 @@ Game.prototype = {
         console.log('rollDoneHandler inbusy: currentPlayer=' + player.color +
 				' dice=' + newValue);
 
+		game.board.hideUserOpHint();
         if ((game.board.getBaseFreeField(player.color) === null) &&
                 (newValue !== 6)) {
             game.nextPlayer();
@@ -644,6 +652,8 @@ Game.prototype = {
 			// TODO: select a pawn before focus the player
             player.focus();
             game.stat = GAME_STATUS.WAIT_FOR_PAWN;
+			if (player.getUser().type === User.TYPE.HUMAN)
+				game.board.showUserOpHint('slide', player.color);
         }
     }
 	function rollDoneHandler_outofbusy(diceValue) {

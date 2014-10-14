@@ -89,6 +89,64 @@ body {
 	left:     490px;
 }
 
+#click-hint {
+	display:  none;
+	position: absolute;
+	width:    150px;
+	height:   75px;
+	background-image: url('../help/good/click.png');
+	opacity:  .5;
+}
+
+.click-red {
+	top:   456px;
+	left:  -63px;
+}
+
+.click-yellow {
+	top:   106px;
+	left:  -63px;
+}
+
+.click-blue {
+	top:   106px;
+	left:  905px;
+}
+
+.click-green {
+	top:   456px;
+	left:  905px;
+}
+
+#slide-hint {
+	display:  none;
+	position: absolute;
+	width:    150px;
+	height:   75px;
+	background-image: url('../help/good/slide.png');
+	opacity:  .5;
+}
+
+.slide-red {
+	top:   456px;
+	left:  -63px;
+}
+
+.slide-yellow {
+	top:   106px;
+	left:  -63px;
+}
+
+.slide-blue {
+	top:   106px;
+	left:  945px;
+}
+
+.slide-green {
+	top:   456px;
+	left:  945px;
+}
+
 #player-info-left {
     width:    190px;
 	height:   640px;

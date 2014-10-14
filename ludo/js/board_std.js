@@ -38,6 +38,9 @@ var BoardSTD = function (id) {
 	this.initBases();
 	this.initDestinations();
 
+    $('#content').append('<div id="click-hint"></div>');
+    $('#content').append('<div id="slide-hint"></div>');
+
     this.$elem.append('<div id="game_over_info"><ul>Game Over</ul></div>');
 	$('#game_over_info').hide();
 
@@ -161,6 +164,29 @@ BoardSTD.prototype.addPlayerInfo = function(color, name) {
 		player_name + '</div>';
     info_parent.append(player_name);
 	info_parent.append('<div id="rank-' + color + '" class="rank-info">');
+};
+
+BoardSTD.prototype.showUserOpHint = function (op, color) {
+	/*
+	 * op = click or slide
+	 */
+	var e = $('#' + op + '-hint');
+	e.addClass(op + '-' + color);
+	e.show();
+};
+
+BoardSTD.prototype.hideUserOpHint = function (color) {
+	$('#click-hint').removeClass('click-red');
+	$('#click-hint').removeClass('click-yellow');
+	$('#click-hint').removeClass('click-blue');
+	$('#click-hint').removeClass('click-green');
+	$('#click-hint').hide();
+
+	$('#slide-hint').removeClass('slide-red');
+	$('#slide-hint').removeClass('slide-yellow');
+	$('#slide-hint').removeClass('slide-blue');
+	$('#slide-hint').removeClass('slide-green');
+	$('#slide-hint').hide();
 };
 
 BoardSTD.prototype.updatePlayerInfo = function(color, name, stat) {
