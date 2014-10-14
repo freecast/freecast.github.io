@@ -95,7 +95,14 @@ body {
 	width:    150px;
 	height:   75px;
 	background-image: url('../images/standard/click.png');
-	opacity:  .5;
+	opacity:  .6;
+}
+#click-hint-text {
+	color:    #000000;
+	font-weight: bold;
+	position: absolute;
+	top:      56px;
+	left:     10px;
 }
 
 .click-red {
@@ -124,7 +131,15 @@ body {
 	width:    150px;
 	height:   75px;
 	background-image: url('../images/standard/slide.png');
-	opacity:  .5;
+	opacity:  .6;
+}
+#slide-hint-text {
+	color:    #000000;
+	font-weight: bold;
+	position: absolute;
+	top:      56px;
+	left:     -55px;
+	width:    190px;
 }
 
 .slide-red {

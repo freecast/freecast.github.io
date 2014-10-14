@@ -38,8 +38,8 @@ var BoardSTD = function (id) {
 	this.initBases();
 	this.initDestinations();
 
-    $('#content').append('<div id="click-hint"></div>');
-    $('#content').append('<div id="slide-hint"></div>');
+    $('#content').append('<div id="click-hint"><ul id="click-hint-text">click to roll</ul></div>');
+    $('#content').append('<div id="slide-hint"><ul id="slide-hint-text">slide to switch pawns</ul></div>');
 
     this.$elem.append('<div id="game_over_info"><ul>Game Over</ul></div>');
 	$('#game_over_info').hide();
