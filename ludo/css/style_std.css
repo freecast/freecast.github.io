@@ -98,7 +98,7 @@ body {
 	opacity:  .6;
 }
 #click-hint-text {
-	color:    #000000;
+	color:    #ffffff;
 	font-weight: bold;
 	position: absolute;
 	top:      56px;
@@ -134,7 +134,7 @@ body {
 	opacity:  .6;
 }
 #slide-hint-text {
-	color:    #000000;
+	color:    #ffffff;
 	font-weight: bold;
 	position: absolute;
 	top:      56px;
