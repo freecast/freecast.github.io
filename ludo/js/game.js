@@ -369,6 +369,7 @@ Game.prototype = {
 
 	isReady: function() {
 		var i = 0, p, u;
+		var num_unavail = 0;
 		while (p = game.players[i]) {
 			u = p.getUser();
 			if (u.type == User.TYPE.NOBODY) {
@@ -381,8 +382,12 @@ Game.prototype = {
 						' is not ready, do NOT start game');
 				return false;
 			}
+			if (u.type == User.TYPE.UNAVAILABLE)
+				num_unavail++;
 			i++;
 		}
+		if (num_unavail == 4)
+			return false;
 		return true;
 	},
 
