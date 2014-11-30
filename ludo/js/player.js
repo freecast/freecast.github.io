@@ -196,9 +196,87 @@ Player.prototype.prevPawn = function () {
 	return true;
 }
 
+function getNextPos(pos, diceValue, arrivePos) {
+	var nextPos = pos + diceValue;
+	if (nextPos > arrivePos)
+		nextPos = arrivePos - (nextPos - arrivePos);
+	return nextPos;
+}
+
 Player.prototype.selectPawnAndMove = function(diceValue) {
-	// TODO: simply select a pawn for diceValue
-	// if current pawn is OK, that's it
+	if (this.isTimeOut) {
+		this.timeOutSelectAndMove(diceValue);
+		return;
+	}
+	// 1. kill other player?
+	var i = 0, p, nextPos, dstField;
+	while (p = this.pawns[i]) {
+		if (p.position >= 0) {
+			nextPos = getNextPos(p.position, diceValue, this.arrivePosition);
+			dstField = this.board.getField(this.path[nextPos]);
+			if (checkKill(this, dstField)) {
+				this.blur();
+				this.currentPawn = i;
+				this.focus();
+				this.move(diceValue, p);
+				return;
+			}
+		}
+		i++;
+	}
+	// 2. arrive home
+	i = 0;
+	while (p = this.pawns[i]) {
+		if (p.position + diceValue === this.arrivePosition) {
+			this.blur();
+			this.currentPawn = i;
+			this.focus();
+			this.move(diceValue, p);
+			return;
+		}
+		i++;
+	}
+	// 3. move out of base
+	i = 0;
+	if (diceValue === 6) {
+		while (p = this.pawns[i]) {
+			if (p.position === -1) {
+				this.blur();
+				this.currentPawn = i;
+				this.focus();
+				this.move(diceValue, p);
+				return;
+			}
+			i++;
+		}
+	}
+	// 4. fly or jump
+	i = 0;
+	while (p = this.pawns[i]) {
+		if (p.position >= 0) {
+			nextPos = getNextPos(p.position, diceValue, this.arrivePosition);
+			dstField = this.board.getField(this.path[nextPos]);
+			if (dstField.color === this.color &&
+					(dstField.action === ACTION.JUMP ||
+					 dstField.action === ACTION.FLIGHT)) {
+				this.blur();
+				this.currentPawn = i;
+				this.focus();
+				this.move(diceValue, p);
+				return;
+			}
+		}
+		i++;
+	}
+	// 5. move the current pawn
+	p = this.pawns[this.currentPawn];
+	if (p.position >= 0)
+		this.move(diceValue, p);
+}
+
+Player.prototype.timeOutSelectAndMove = function(diceValue) {
+	// simply select a pawn for diceValue in case of timeout.
+	// If current pawn is OK to move with diceValue, that's it.
 	// otherwise do some simple search
 
 	// 1. current pawn out of base
@@ -328,13 +406,6 @@ Player.prototype.move = function (distance, pawn) {
 					(nextPos - this.arrivePosition);
 	dest = this.path[nextPos];
 	destField = this.board.getField(dest);
-
-	function checkKill(player, destF) {
-		var destP = destF.getPawns();
-		if (destP.length > 0 && destP[0].player !== player)
-			return true;
-		return false
-	};
 
 	if (nextPos < this.arrivePosition) {
 		if (checkKill(this, destField)) {
@@ -528,4 +599,11 @@ Player.prototype.reset = function () {
 	this.currentPawn = 0;
 
 	this.numArrived = 0;
+};
+
+function checkKill(player, destF) {
+	var destP = destF.getPawns();
+	if (destP.length > 0 && destP[0].player !== player)
+		return true;
+	return false
 };
