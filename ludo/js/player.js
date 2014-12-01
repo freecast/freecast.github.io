@@ -211,7 +211,7 @@ Player.prototype.selectPawnAndMove = function(diceValue) {
 	// 1. kill other player?
 	var i = 0, p, nextPos, dstField;
 	while (p = this.pawns[i]) {
-		if (p.position >= 0) {
+		if (p.position >= 0 && p.isArrived === false) {
 			nextPos = getNextPos(p.position, diceValue, this.arrivePosition);
 			dstField = this.board.getField(this.path[nextPos]);
 			if (checkKill(this, dstField)) {
@@ -219,6 +219,7 @@ Player.prototype.selectPawnAndMove = function(diceValue) {
 				this.currentPawn = i;
 				this.focus();
 				this.move(diceValue, p);
+				console.log("selectPawnAndMove finished with kill-other");
 				return;
 			}
 		}
@@ -232,6 +233,7 @@ Player.prototype.selectPawnAndMove = function(diceValue) {
 			this.currentPawn = i;
 			this.focus();
 			this.move(diceValue, p);
+			console.log("selectPawnAndMove finished with arrive-home");
 			return;
 		}
 		i++;
@@ -245,6 +247,7 @@ Player.prototype.selectPawnAndMove = function(diceValue) {
 				this.currentPawn = i;
 				this.focus();
 				this.move(diceValue, p);
+				console.log("selectPawnAndMove finished with out-of-base");
 				return;
 			}
 			i++;
@@ -253,7 +256,7 @@ Player.prototype.selectPawnAndMove = function(diceValue) {
 	// 4. fly or jump
 	i = 0;
 	while (p = this.pawns[i]) {
-		if (p.position >= 0) {
+		if (p.position >= 0 && p.isArrived === false) {
 			nextPos = getNextPos(p.position, diceValue, this.arrivePosition);
 			dstField = this.board.getField(this.path[nextPos]);
 			if (dstField.color === this.color &&
@@ -263,15 +266,30 @@ Player.prototype.selectPawnAndMove = function(diceValue) {
 				this.currentPawn = i;
 				this.focus();
 				this.move(diceValue, p);
+				console.log("selectPawnAndMove finished with fly/jump");
 				return;
 			}
 		}
 		i++;
 	}
 	// 5. move the current pawn
-	p = this.pawns[this.currentPawn];
-	if (p.position >= 0)
-		this.move(diceValue, p);
+	i = 0;
+	var index = this.currentPawn;
+	while (i < 4) {
+		p = this.pawns[index];
+		if (p.position >= 0 && p.isArrived === false) {
+			this.blur();
+			this.currentPawn = i;
+			this.focus();
+			this.move(diceValue, p);
+			console.log("selectPawnAndMove finished with %d", index);
+			return;
+		}
+		i++;
+		index++;
+		if (index === 4)
+			index = 0;
+	}
 }
 
 Player.prototype.timeOutSelectAndMove = function(diceValue) {
@@ -290,7 +308,9 @@ Player.prototype.timeOutSelectAndMove = function(diceValue) {
 	var i = 0, pawn;
 	while (pawn = this.pawns[i]) {
 		if (pawn.isArrived == false && pawn.position >= 0) {
+			this.blur();
 			this.currentPawn = i;
+			this.focus();
 			this.move(diceValue, pawn);
 			return;
 		}
@@ -302,7 +322,9 @@ Player.prototype.timeOutSelectAndMove = function(diceValue) {
 		i = this.currentPawn;
 		while (pawn = this.pawns[i]) {
 			if (pawn.isArrived == false) {
+				this.blur();
 				this.currentPawn = i;
+				this.focus();
 				this.move(diceValue, pawn);
 				return;
 			}
